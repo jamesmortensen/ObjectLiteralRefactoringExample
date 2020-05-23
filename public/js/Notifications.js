@@ -7,6 +7,8 @@ var Status = {
 
 // GLOBAL VAR!
 var currentStatus;
+var notificationsOn = true;
+
 
 var notificationsMod = {
     sendNotification: function () {
@@ -32,8 +34,12 @@ var notificationsMod = {
         return currentStatus;
     },
 
+    setNotificationsOnOff: function(value) {
+        notificationsOn = value === 'on';
+    },
+
     isOn: function() {
-        return document.getElementsByName('notifications')[0].checked;
+        return notificationsOn;
     }
 }
     
@@ -44,4 +50,10 @@ window.addEventListener('load', function () {
     document.getElementById('hours').value = hours;
 
     document.getElementById('submit').onclick = notificationsMod.sendNotification;
+
+    document.getElementsByName('notifications').forEach(function() {
+        this.addEventListener('change', function(input) {
+            notificationsMod.setNotificationsOnOff(input.target.id);
+        });
+    });
 }, false);
