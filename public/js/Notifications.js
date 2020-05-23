@@ -8,6 +8,7 @@ var Status = {
 // GLOBAL VAR!
 var currentStatus;
 var notificationsOn = true;
+var globalMessage = '';
 
 
 var notificationsMod = {
@@ -16,7 +17,7 @@ var notificationsMod = {
         var hours = document.getElementById('hours').value;
 
         if (notificationsMod.isOn() && (hours > 8 && hours < 20 )) {
-            alert(document.getElementById('message').value);
+            alert(globalMessage);
             console.log('message = ' + status.message);
         } else {
             // no message
@@ -38,6 +39,10 @@ var notificationsMod = {
         notificationsOn = value === 'on';
     },
 
+    setMessage: function(message) {
+        globalMessage = message;
+    },
+
     isOn: function() {
         return notificationsOn;
     }
@@ -51,9 +56,15 @@ window.addEventListener('load', function () {
 
     document.getElementById('submit').onclick = notificationsMod.sendNotification;
 
-    document.getElementsByName('notifications').forEach(function() {
-        this.addEventListener('change', function(input) {
+    document.getElementsByName('notifications').forEach(function(elem, index, array) {
+        elem.addEventListener('change', function(input) {
             notificationsMod.setNotificationsOnOff(input.target.id);
         });
     });
+
+    document.getElementById('message').onblur = function() {
+        notificationsMod.setMessage(this.value);
+    }
+    document.getElementById('message').focus();
+    document.getElementById('message').blur();
 }, false);
